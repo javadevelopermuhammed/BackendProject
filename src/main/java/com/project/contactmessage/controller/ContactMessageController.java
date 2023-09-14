@@ -26,14 +26,14 @@ public class ContactMessageController {
     private final ContactMessageService contactMessageService;
 
     // Not: save() **************************************************
-    @PostMapping("/save") // http://localhost:8080/contactMessage/save  + POST + Json dosya gelir
+    @PostMapping("/save") // http://localhost:8080/contactMessages/save  + POST + Json dosya gelir
     public ResponseMessage<ContactMessageResponse> save(@RequestBody @Valid ContactMessageRequest contactMessageRequest ){
 
        return contactMessageService.save(contactMessageRequest);
     }
 
     //Not: getAll() *************************************************
-    @GetMapping("/getAll") // http://localhost:8080/contactMessage/getAll/page?page=0&size=10&sort=dateTime&direction=ASC + GET
+    @GetMapping("/getAll") // http://localhost:8080/contactMessages/getAll/page?page=0&size=10&sort=dateTime&direction=ASC + GET
     public Page<ContactMessageResponse> getAll(
             @RequestParam(value = "page",defaultValue = "0") int page,
             @RequestParam(value = "size",defaultValue = "10") int size,
@@ -106,19 +106,36 @@ public class ContactMessageController {
 
     // Not: Odev --> searchByDateBetween **************************
     // http://localhost:8080/contactMessages/searchByDateBetween?date=2023-09-11
-    @GetMapping("/searchByDateBetween")
-    public ResponseEntity<Page<ContactMessage>> searchBYDateBetween(
-            @RequestParam("date1") LocalDateTime localDateTime,
-            @RequestParam("date2") LocalDateTime localDateTime2,
-            @RequestParam(value = "page",defaultValue = "0") int page,
-            @RequestParam(value = "size",defaultValue = "10") int size,
-            @RequestParam(value = "sort",defaultValue = "dateTime") String sort,
-            @RequestParam(value = "type",defaultValue = "desc") String type){
+    //@GetMapping("/searchByDateBetween")
+    //public ResponseEntity<Page<ContactMessage>> searchBYDateBetween(
+    //        @RequestParam("date1") LocalDateTime localDateTime,
+    //        @RequestParam("date2") LocalDateTime localDateTime2,
+    //        @RequestParam(value = "page",defaultValue = "0") int page,
+    //        @RequestParam(value = "size",defaultValue = "10") int size,
+    //        @RequestParam(value = "sort",defaultValue = "dateTime") String sort,
+    //        @RequestParam(value = "type",defaultValue = "desc") String type){
 
-        return  contactMessageService.searchByDateBetweenDate1AndDate2(localDateTime,localDateTime2,page,size,sort,type);
+    //    return  contactMessageService.searchByDateBetweenDate1AndDate2(localDateTime,localDateTime2,page,size,sort,type);
 
+    //}
+    // Not: Odev --> searchByDateBetween ************************
+    @GetMapping("/searchBetweenDates") // http://localhost:8080/contactMessages/searchBetweenDates?beginDate=2023-09-13&endDate=2023-09-15
+    public ResponseEntity<List<ContactMessage>> searchByDateBetween(
+            @RequestParam(value = "beginDate") String beginDateString,
+            @RequestParam(value = "endDate") String endDateString){
+        List<ContactMessage>contactMessages = contactMessageService.searchByDateBetween(beginDateString, endDateString);
+        return ResponseEntity.ok(contactMessages);
     }
 
-
     // Not: Odev --> searchByTimeBetween **************************
+    // Not: Odev --> searchByTimeBetween ************************
+    @GetMapping("/searchBetweenTimes") // http://localhost:8080/contactMessages/searchBetweenTimes?startHour=09&startMinute=00&endHour=17&endMinute=30
+    public ResponseEntity<List<ContactMessage>> searchByTimeBetween(
+            @RequestParam(value = "startHour") String startHour,
+            @RequestParam(value = "startMinute") String startMinute,
+            @RequestParam(value = "endHour") String endHour,
+            @RequestParam(value = "endMinute") String endMinute){
+        List<ContactMessage>contactMessages = contactMessageService.searchByTimeBetween(startHour,startMinute,endHour,endMinute);
+        return ResponseEntity.ok(contactMessages);
+    }
 }

@@ -4,6 +4,7 @@ import com.project.contactmessage.dto.ContactMessageRequest;
 import com.project.contactmessage.dto.ContactMessageResponse;
 import com.project.contactmessage.dto.ContactMessageUpdateRequest;
 import com.project.contactmessage.entity.ContactMessage;
+import com.project.contactmessage.exception.ConflictException;
 import com.project.contactmessage.exception.ResourceNotFoundException;
 import com.project.contactmessage.mapper.ContactMessageMapper;
 import com.project.contactmessage.message.Messages;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Objects;
 
@@ -123,14 +125,39 @@ public class ContactMessageService {
                 .build();
     }
 
-    public ResponseEntity<Page<ContactMessage>> searchByDateBetweenDate1AndDate2(LocalDateTime localDateTime, LocalDateTime localDateTime2, int page, int size, String sort, String type) {
+    //public ResponseEntity<Page<ContactMessage>> searchByDateBetweenDate1AndDate2(LocalDateTime localDateTime, LocalDateTime localDateTime2, int page, int size, String sort, String type) {
+//
+    //    Pageable pageable= PageRequest.of(page,size, Sort.by(sort).ascending());
+//
+    //    if (Objects.equals(type,"desc")){
+    //        pageable=PageRequest.of(page,size, Sort.by(sort).descending());
+    //    }
+//
+    //   return ResponseEntity.ok(contactMessageRepository.findByStartDateBetweenDate1AndDate2(localDateTime,localDateTime2,pageable));
+    //}
 
-        Pageable pageable= PageRequest.of(page,size, Sort.by(sort).ascending());
-
-        if (Objects.equals(type,"desc")){
-            pageable=PageRequest.of(page,size, Sort.by(sort).descending());
+    // Not: Odev --> searchByDateBetween ************************
+    public List<ContactMessage> searchByDateBetween(String beginDateString, String endDateString) {
+        try {
+            LocalDate beginDate = LocalDate.parse(beginDateString);
+            LocalDate endDate = LocalDate.parse(endDateString);
+            return contactMessageRepository.findMessagesBetweenDates(beginDate, endDate);
+        } catch (DateTimeParseException e) {
+            throw new ConflictException(Messages.WRONG_DATE_FORMAT);
         }
+    }
 
-       return ResponseEntity.ok(contactMessageRepository.findByStartDateBetweenDate1AndDate2(localDateTime,localDateTime2,pageable));
+    // Not: Odev --> searchByTimeBetween ************************
+    public List<ContactMessage> searchByTimeBetween(String startHourString, String startMinuteString,
+                                                    String endHourString, String endMinuteString) {
+        try {
+            int startHour = Integer.parseInt(startHourString);
+            int startMinute = Integer.parseInt(startMinuteString);
+            int endHour = Integer.parseInt(endHourString);
+            int endMinute = Integer.parseInt(endMinuteString);
+            return contactMessageRepository.findMessagesBetweenTimes(startHour, startMinute, endHour, endMinute);
+        } catch (NumberFormatException e) {
+            throw new ConflictException(Messages.WRONG_TIME_FORMAT);
+        }
     }
 }
