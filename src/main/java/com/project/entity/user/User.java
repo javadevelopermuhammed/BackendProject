@@ -2,6 +2,7 @@ package com.project.entity.user;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.project.entity.enums.Gender;
 import lombok.*;
 
 import javax.persistence.*;
@@ -58,4 +59,12 @@ public class User {
     private Boolean isAdvisor;
 
     private Long advisorTeacherId; // bu field studentlar icin eklendi
+
+    private Gender gender;
+
+    @OneToOne
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private UserRole userRole;
+
+    // Not: Student-Info-LessonProgram-Meet
 }
