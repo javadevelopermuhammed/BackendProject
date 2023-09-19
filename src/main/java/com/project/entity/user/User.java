@@ -1,12 +1,18 @@
 package com.project.entity.user;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.project.entity.business.LessonProgram;
+import com.project.entity.business.Meet;
+import com.project.entity.business.StudentInfo;
 import com.project.entity.enums.Gender;
 import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -23,14 +29,14 @@ public class User {
     private Long id;
 
     @Column(unique = true)
-    private String userName;
+    private String username;
 
     @Column(unique = true)
     private String ssn;
 
-    private String name;
+    private String name ;
 
-    private String surname;
+    private String surname ;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate birthDay;
@@ -46,7 +52,7 @@ public class User {
     @Column(unique = true)
     private String email;
 
-    private boolean built_in;
+    private Boolean built_in;
 
     private String motherName;
 
@@ -58,7 +64,7 @@ public class User {
 
     private Boolean isAdvisor;
 
-    private Long advisorTeacherId; // bu field studentlar icin eklendi
+    private Long advisorTeacherId; // bu field student lar icin eklendi
 
     private Gender gender;
 
@@ -66,5 +72,25 @@ public class User {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private UserRole userRole;
 
-    // Not: Student-Info-LessonProgram-Meet
+    @OneToMany(mappedBy = "teacher",cascade = CascadeType.REMOVE)
+    private List<StudentInfo> studentInfos; // set olabilir ??
+
+    @JsonIgnore
+    @ManyToMany
+    @JoinTable(
+            name = "user_lessonprogram",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "lesson_program_id")
+    )
+    private Set<LessonProgram> lessonsProgramList;
+
+    @JsonIgnore
+    @ManyToMany
+    @JoinTable(
+            name = "meet_student_table",
+            joinColumns = @JoinColumn(name = "student_id"),
+            inverseJoinColumns = @JoinColumn(name = "meet_id")
+    )
+    private List<Meet> meetList;
+
 }
