@@ -19,6 +19,7 @@ public class ContactMessageMapper {
                 .email(contactMessageRequest.getEmail())
                 .dateTime(LocalDateTime.now())
                 .build();
+
     }
 
     public ContactMessageResponse contactMessageToResponse(ContactMessage contactMessage){
@@ -30,5 +31,4 @@ public class ContactMessageMapper {
                 .dateTime(contactMessage.getDateTime())
                 .build();
     }
-
 }

@@ -33,7 +33,7 @@ public class Meet {
     @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "HH:mm",timezone = "US")
     private LocalTime endTime;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private User advisoryTeacher;
 
     @ManyToMany
@@ -42,5 +42,5 @@ public class Meet {
             joinColumns = @JoinColumn(name = "meet_id"),
             inverseJoinColumns = @JoinColumn(name = "student_id")
     )
-    private List<User> studentList; // TODO Set ?
+    private List<User> studentList; // TODO Set ??
 }

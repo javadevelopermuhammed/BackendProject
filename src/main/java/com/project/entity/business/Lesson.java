@@ -26,6 +26,6 @@ public class Lesson {
     private boolean isCompulsory;
 
     @JsonIgnore
-    @ManyToMany(mappedBy = "lessons",cascade = CascadeType.REMOVE)
+    @ManyToMany(mappedBy = "lessons", cascade = CascadeType.REMOVE)
     private Set<LessonProgram> lessonPrograms;
 }

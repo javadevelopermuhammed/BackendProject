@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
 public class LoginRequest {
 
     @NotNull(message = "username must not be empty")
-    private String userName;
+    private String username;
 
     @NotNull(message = "password must not be empty")
     private String password;

@@ -34,7 +34,7 @@ public class UserDetailsImpl implements UserDetails {
     private Collection<? extends GrantedAuthority> authorities;
 
     public UserDetailsImpl(Long id, String username, String name, Boolean isAdvisor,
-                           String password, String role ,String ssn) {
+                           String password, String role, String ssn) {
         this.id = id;
         this.username = username;
         this.name = name;
@@ -83,15 +83,16 @@ public class UserDetailsImpl implements UserDetails {
 
     public boolean equals(Object o){
 
-        if (this==o){
+        if(this==o){
             return true;
         }
 
-        if (o== null || getClass()!=o.getClass()){
+        if(o== null || getClass()!=o.getClass()){
             return false;
         }
 
         UserDetailsImpl user = (UserDetailsImpl) o;
         return Objects.equals(id,user.getId());
     }
+
 }

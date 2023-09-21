@@ -7,7 +7,6 @@ import com.project.entity.user.User;
 import lombok.*;
 
 import javax.persistence.*;
-import java.net.IDN;
 import java.time.LocalTime;
 import java.util.Set;
 
@@ -27,28 +26,30 @@ public class LessonProgram {
     @Enumerated(EnumType.STRING)
     private Day day;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "HH:mm",timezone = "US")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm", timezone = "US")
     private LocalTime startTime;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "HH:mm",timezone = "US")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm", timezone = "US")
     private LocalTime endTime;
 
     @ManyToMany
     @JoinTable(
             name = "lesson_program_lesson",
             joinColumns = @JoinColumn(name = "lessonprogram_id"),
-            inverseJoinColumns = @JoinColumn(name = "lesson_id"))
+            inverseJoinColumns = @JoinColumn(name = "lesson_id")
+    )
     private Set<Lesson> lessons;
 
     @ManyToOne(cascade = CascadeType.PERSIST)
     private EducationTerm educationTerm;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    @ManyToMany(mappedBy = "lessonsProgramList",fetch = FetchType.EAGER)
-    private Set<User> users;
+    @ManyToMany(mappedBy = "lessonsProgramList", fetch = FetchType.EAGER)
+    private Set<User> users ;
 
     @PreRemove
     private void removeLessonProgramFromUser(){
-        users.forEach(user -> user.getLessonsProgramList().remove(this));
+        users.forEach(user-> user.getLessonsProgramList().remove(this));
     }
+
 }

@@ -1,6 +1,6 @@
 package com.project.contactmessage.repository;
 
-import  com.project.contactmessage.entity.ContactMessage;
+import com.project.contactmessage.entity.ContactMessage;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -9,24 +9,19 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Repository
-public interface ContactMessageRepository extends JpaRepository<ContactMessage,Long> {
+public interface ContactMessageRepository extends JpaRepository<ContactMessage, Long> {
 
-   Page<ContactMessage> findByEmailEquals(String email, Pageable pageable);//burada bir hata alırsak bu iki yerde
-   //olabilir biri service katinda digeri burada olmustur.
-   Page<ContactMessage> findBySubjectEquals(String subject, Pageable pageable);
-
-   //Page<ContactMessage> findByStartDateBetweenDate1AndDate2(LocalDateTime localDateTime, LocalDateTime localDateTime2, Pageable pageable);
+    Page<ContactMessage> findByEmailEquals(String email, Pageable pageable);
+    Page<ContactMessage> findBySubjectEquals(String subject, Pageable pageable);
 
     /*
-         FUNCTION('DATE', c.dateTime): Bu bölüm, c.dateTime alanının tarih bileşenini çıkarmak için kullanılır.
-         c.dateTime bir tarih-saat nesnesi içerdiğinden ve bu sorgu yalnızca tarih bileşenini kullanmak istediğinden,
-         FUNCTION işlevi ile tarih bileşeni çıkarılır.
-      */
+        FUNCTION('DATE', c.dateTime): Bu bölüm, c.dateTime alanının tarih bileşenini çıkarmak için kullanılır.
+        c.dateTime bir tarih-saat nesnesi içerdiğinden ve bu sorgu yalnızca tarih bileşenini kullanmak istediğinden,
+        FUNCTION işlevi ile tarih bileşeni çıkarılır.
+     */
     @Query("select c from ContactMessage c where FUNCTION('DATE', c.dateTime) between ?1 and ?2")
     List<ContactMessage> findMessagesBetweenDates(LocalDate beginDate, LocalDate endDate);
 
@@ -39,3 +34,12 @@ public interface ContactMessageRepository extends JpaRepository<ContactMessage,L
                                                   @Param("endHour") int endHour,
                                                   @Param("endMinute") int endMinute);
 }
+
+
+
+
+
+
+
+
+

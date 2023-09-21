@@ -1,6 +1,7 @@
 package com.project.entity.business;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.project.entity.enums.Term;
 import com.sun.jdi.PrimitiveValue;
 import lombok.*;
@@ -42,8 +43,8 @@ public class EducationTerm {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate lastRegistrationDate;
 
-    // Not: LessonProgram
-    @OneToMany(mappedBy = "educationTerm",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "educationTerm", cascade = CascadeType.ALL)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private List<LessonProgram> lessonProgram;
 
 }

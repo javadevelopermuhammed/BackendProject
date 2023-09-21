@@ -47,7 +47,7 @@ public class User {
     private String password;
 
     @Column(unique = true)
-    private String phoneNumber;
+    private String phoneNumber; // existsByPhoneNumber
 
     @Column(unique = true)
     private String email;
@@ -66,11 +66,13 @@ public class User {
 
     private Long advisorTeacherId; // bu field student lar icin eklendi
 
+    @Enumerated(EnumType.STRING)
     private Gender gender;
 
     @OneToOne
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private UserRole userRole;
+
 
     @OneToMany(mappedBy = "teacher",cascade = CascadeType.REMOVE)
     private List<StudentInfo> studentInfos; // set olabilir ??
@@ -92,5 +94,4 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "meet_id")
     )
     private List<Meet> meetList;
-
 }

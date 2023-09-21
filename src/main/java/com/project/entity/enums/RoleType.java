@@ -15,6 +15,6 @@ public enum RoleType {
     }
 
     public String getName(){
-        return name;
+        return  name;
     }
 }
