@@ -27,6 +27,7 @@ public class EducationTermService {
 
     private final EducationTermRepository educationTermRepository;
     private final EducationTermMapper educationTermMapper;
+
     private final PageableHelper pageableHelper;
 
     // Not: save() ****************************************
@@ -48,7 +49,7 @@ public class EducationTermService {
     private void validateEducationTermDatesForRequest(EducationTermRequest educationTermRequest){
 
         // !!! bu methodda amacimiz requestten gelen registrationDate, startDate, endDate arasindaki
-        //  tarih sirasina gore dogru mu setlenmis onu kontrol etmek
+            //  tarih sirasina gore dogru mu setlenmis onu kontrol etmek
         // registration , startDate den once olmali ..
         if(educationTermRequest.getLastRegistrationDate().isAfter(educationTermRequest.getStartDate())) {
             throw new BadRequestException(ErrorMessages.EDUCATION_START_DATE_IS_EARLIER_THAN_LAST_REGISTRATION_DATE);
@@ -85,19 +86,21 @@ public class EducationTermService {
 
     }
 
-    // Not: getById() *****************************
+    // Not: getById() **************************************
     public EducationTermResponse getEducationTermResponseById(Long id) {
-        EducationTerm term = isEducationTermExist(id);
-        return educationTermMapper.mapEducationTermToEducationTermResponse(term);
+
+       EducationTerm term = isEducationTermExist(id);
+       return educationTermMapper.mapEducationTermToEducationTermResponse(term);
     }
 
     private EducationTerm isEducationTermExist(Long id){
         return educationTermRepository.findById(id).orElseThrow(()->
-                new ResourceNotFoundException(String.format(ErrorMessages.EDUCATION_TERM_NOT_FOUND_MESSAGE,id)));
+                new ResourceNotFoundException(String.format(ErrorMessages.EDUCATION_TERM_NOT_FOUND_MESSAGE, id)));
     }
 
     // Not: getAll() **************************************
     public List<EducationTermResponse> getAllEducationTerms() {
+
         return educationTermRepository.findAll()
                 .stream()
                 .map(educationTermMapper::mapEducationTermToEducationTermResponse)
@@ -106,9 +109,9 @@ public class EducationTermService {
 
     // Not: getAllWithPage() ******************************
     public Page<EducationTermResponse> getAllEducationTermsByPage(int page, int size, String sort, String type) {
-        Pageable pageable = pageableHelper.getPageableWithProperties(page,size,sort,type);
+        Pageable pageable = pageableHelper.getPageableWithProperties(page, size, sort, type);
 
-        return  educationTermRepository.findAll(pageable)
+        return educationTermRepository.findAll(pageable)
                 .map(educationTermMapper::mapEducationTermToEducationTermResponse);
     }
 
@@ -116,9 +119,9 @@ public class EducationTermService {
     public ResponseMessage<?> deleteEducationTermById(Long id) {
         isEducationTermExist(id);
         educationTermRepository.deleteById(id);
-        //educationTermRepository.delete(isEducationTermExist(id));
+       // educationTermRepository.delete(isEducationTermExist(id));
 
-        //silinen ed
+        // silinen educationTerme e ait olan LessonProgramlar ne olacak ????  Cascade Type dan dolayi herhangi bir logic yapmama gerek yok
         return ResponseMessage.builder()
                 .message(SuccessMessages.EDUCATION_TERM_DELETE)
                 .httpStatus(HttpStatus.OK)
@@ -130,13 +133,18 @@ public class EducationTermService {
         isEducationTermExist(id);
         validateEducationTermDates(educationTermRequest);
 
-        EducationTerm updatedEducationTerm =
-                educationTermRepository.save(educationTermMapper.mapEducationTermRequestToUpdatedEducationTerm(id,educationTermRequest));
+        EducationTerm educationTermUpdated =
+                educationTermRepository.save(educationTermMapper.mapEducationTermRequestToUpdatedEducationTerm(id, educationTermRequest));
 
         return ResponseMessage.<EducationTermResponse>builder()
                 .message(SuccessMessages.EDUCATION_TERM_UPDATE)
                 .httpStatus(HttpStatus.OK)
-                .object(educationTermMapper.mapEducationTermToEducationTermResponse(updatedEducationTerm))
+                .object(educationTermMapper.mapEducationTermToEducationTermResponse(educationTermUpdated))
                 .build();
+    }
+
+    // Not: LessonProgramSErvice icin yazildi *******
+    public EducationTerm getEducationTermById(Long id){
+       return isEducationTermExist(id);
     }
 }

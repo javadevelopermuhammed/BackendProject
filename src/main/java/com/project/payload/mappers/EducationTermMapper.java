@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class EducationTermMapper {
 
-    public EducationTerm mapEducationTermRequestToEducationTerm(EducationTermRequest educationTermRequest){
+    public EducationTerm mapEducationTermRequestToEducationTerm(EducationTermRequest educationTermRequest) {
         return EducationTerm.builder()
                 .term(educationTermRequest.getTerm())
                 .startDate(educationTermRequest.getStartDate())
@@ -33,4 +33,6 @@ public class EducationTermMapper {
                 .id(id)
                 .build();
     }
+
+
 }

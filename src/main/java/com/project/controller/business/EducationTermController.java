@@ -27,7 +27,7 @@ public class EducationTermController {
         return educationTermService.saveEducationTerm(educationTermRequest);
     }
 
-    // Not: getById() *****************************
+    // Not: getById() **************************************
     @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER','TEACHER')")
     @GetMapping("/{id}")
     public EducationTermResponse getEducationTermById(@PathVariable Long id){
@@ -41,10 +41,11 @@ public class EducationTermController {
         return educationTermService.getAllEducationTerms();
     }
 
+
     // Not: getAllWithPage() ******************************
     @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER','TEACHER')")
     @GetMapping("/getAllEducationTermsByPage")
-    public Page<EducationTermResponse> getAllEducationTermsByPage(
+    public Page<EducationTermResponse>  getAllEducationTermsByPage(
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "10") int size,
             @RequestParam(value = "sort", defaultValue = "startDate") String sort,
@@ -52,6 +53,7 @@ public class EducationTermController {
     ){
         return educationTermService.getAllEducationTermsByPage(page,size,sort,type);
     }
+
 
     // Not: deleteById() **********************************
     @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER')")
@@ -62,11 +64,10 @@ public class EducationTermController {
 
     // Not: updateById() **********************************
     @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER')")
-    @DeleteMapping("/update/{id}")
+    @PutMapping("/update/{id}")
     public ResponseMessage<EducationTermResponse> updateEducationTerm(@PathVariable Long id,
                                                                       @RequestBody @Valid EducationTermRequest educationTermRequest){
-        return educationTermService.updateEducationTerm(id,educationTermRequest);
+        return educationTermService.updateEducationTerm(id, educationTermRequest);
     }
-
 
 }

@@ -1,6 +1,7 @@
 package com.project.service.validator;
 
 import com.project.entity.business.LessonProgram;
+import com.project.exception.BadRequestException;
 import com.project.exception.ConflictException;
 import com.project.payload.messages.ErrorMessages;
 import org.springframework.stereotype.Component;
@@ -11,6 +12,15 @@ import java.util.Set;
 
 @Component
 public class DateTimeValidator {
+
+    public boolean checkTime(LocalTime start, LocalTime stop) {
+        return start.isAfter(stop) || start.equals(stop);
+    }
+    public void checkTimeWithException(LocalTime start, LocalTime stop) {
+        if(checkTime(start, stop)) {
+            throw new BadRequestException(ErrorMessages.TIME_NOT_VALID_MESSAGE);
+        }
+    }
 
     public void checkLessonPrograms(Set<LessonProgram> existLessonProgram,
                                     Set<LessonProgram> lessonProgramRequest){// LP1 - LP2 - LP3 - LP4
@@ -83,7 +93,9 @@ public class DateTimeValidator {
                     .anyMatch(lessonProgram -> lessonProgram.getDay().name().equals(requestLessonProgramDay)
                             && (lessonProgram.getStartTime().equals(requestStart)
                             || (lessonProgram.getStartTime().isBefore(requestStart) && lessonProgram.getEndTime().isAfter(requestStart))
-                            || (lessonProgram.getStartTime().isBefore(requestStop) && lessonProgram.getEndTime().isAfter(requestStop))))
+                            || (lessonProgram.getStartTime().isBefore(requestStop) && lessonProgram.getEndTime().isAfter(requestStop))
+                            || (lessonProgram.getStartTime().isAfter(requestStart) && lessonProgram.getEndTime().isBefore(requestStop))))
+
             ) {
                 throw new ConflictException(ErrorMessages.LESSON_PROGRAM_ALREADY_EXIST);
             }
