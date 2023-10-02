@@ -43,4 +43,5 @@ public class ErrorMessages {
     public static final String ALREADY_REGISTER_LESSON_MESSAGE = "Error : Lesson with lesson name %s is already registered";
 
     public static final String STUDENT_INFO_NOT_FOUND = "Error: Student Info not found with id %s";
+    public static final String STUDENT_INFO_NOT_FOUND_BY_STUDENT_ID = "Error: Student Info not found with student id %s";
 }
