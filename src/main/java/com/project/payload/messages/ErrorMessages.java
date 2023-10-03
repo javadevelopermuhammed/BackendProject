@@ -1,5 +1,7 @@
 package com.project.payload.messages;
 
+import java.util.Locale;
+
 public class ErrorMessages {
 
     private  ErrorMessages(){}
@@ -44,4 +46,8 @@ public class ErrorMessages {
 
     public static final String STUDENT_INFO_NOT_FOUND = "Error: Student Info not found with id %s";
     public static final String STUDENT_INFO_NOT_FOUND_BY_STUDENT_ID = "Error: Student Info not found with student id %s";
+    public static final String NOT_FOUND_USER_WITH_ROLE_MESSAGE = "Error: The role information of the user with id %s is not role: %s" ;
+    public static final String MEET_HOURS_CONFLICT = "Error: Meet hours has conflict with existing meets";
+    public static final String MEET_NOT_FOUND_MESSAGE = "Error: Meet not found with id %s";
+
 }
